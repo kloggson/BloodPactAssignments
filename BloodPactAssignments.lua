@@ -1,26 +1,25 @@
-
-
 -- addon frame
 local frame = BPAframe or CreateFrame("FRAME", "BPAframe")
 local ClassRGB = {["Priest"] = {1.00, 1.00, 1.00}, ["Paladin"] = {0.96, 0.55, 0.73}, ["Druid"] = {1.00, 0.49, 0.04}, ["Shaman"] = {0.96, 0.55, 0.73}, ["Warrior"] = {0.78, 0.61, 0.43}}
 
-local potentialTanks = {}
-local classColors = ClassRGB[class]
 
-for i=1,40 do
-      local name, _, _, _, class, _, _, _, _, role, _, _ = GetRaidRosterInfo(i);
-      if class == "Warrior" or class == "Druid" then
-        tank = {class = class, name = name}
-        table.insert(potentialTanks, tank)
-      end
-   end
-   -- print all potential tanks
-   for i=1,#potentialTanks do
-     print(potentialTanks[i].name)
-     print(potentialTanks[i].class)
-
-   end
-
+local function initRaid()
+  print("init raid!")
+  local potentialTanks = {}
+  for i=1,40 do
+    local name, _, _, _, class, _, _, _, _, role, _, _ = GetRaidRosterInfo(i);
+    if class == "Guerrier" or class == "Druide" then
+      tank = {class = class, name = name, color = ClassRGB[class]}
+      table.insert(potentialTanks, tank)
+    end
+  end
+     -- print all potential tanks
+  for i=1,#potentialTanks do
+    print(potentialTanks[i].name)
+    print(potentialTanks[i].class)
+    print(potentialTanks[i].color[1],potentialTanks[i].color[2],potentialTanks[i].color[3])
+  end
+end
 
 -- Main ui window
 local BPA = BPA or CreateFrame("frame", "BPA")
@@ -52,9 +51,18 @@ BPA.heal = BPA:CreateFontString(nil, "ARTWORK")
 BPA.heal:SetFontObject(GameFontNormalSmall)
 BPA.heal:SetPoint("TOP", 0 , - 12)
 BPA.heal:SetText("Blood Pact Raid Assignments")
-CreateFrame("frame", "TankFrame", BPA)
 
-
+-- Tank frame
+local TankFrame = TankFrame or CreateFrame("frame", "TankFrame", BPA)
+TankFrame:SetWidth(512)
+TankFrame:SetHeight(128)
+TankFrame:SetPoint("TOP", BPA)
+TankFrame.initButton = CreateFrame("button", nil, TankFrame, "UIPanelButtonTemplate")
+TankFrame.initButton:SetPoint("TOPRIGHT", -12 , - 36)
+TankFrame.initButton:SetText("Init Raid")
+TankFrame.initButton:SetWidth(70  )
+TankFrame.initButton:SetHeight(22)
+TankFrame.initButton:SetScript("OnClick", initRaid)
 
 -- addon Load
 local function BPALoad(self, event, arg1, arg2, arg3, arg4, ...)
