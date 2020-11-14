@@ -4,8 +4,10 @@
 ## Notes: assign targets
 
 ## Author: Katyparry & Healakunis @ Zandalar Tribe
-## Version: 0.0.1
+## Version: 0.0.2
 
 ##
 
 BloodPactAssignments.lua
+## SavedVariables: bpaDB
+## BloodPactAssignments.xml
