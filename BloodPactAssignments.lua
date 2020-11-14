@@ -3,13 +3,17 @@
 -- addon frame
 local frame = BPAframe or CreateFrame("FRAME", "BPAframe")
 local classcolor = {["Priest"] = {1.00, 1.00, 1.00}, ["Paladin"] = {0.96, 0.55, 0.73}, ["Druid"] = {1.00, 0.49, 0.04}, ["Shaman"] = {0.96, 0.55, 0.73}, ["Warrior"] = {0.78, 0.61, 0.43}}
-potentialTanks = {}
+
+    potentialTanks = {}
+
+local classcolor = classcolor[potentialTanks[i].class]
+print (classcolor[1],classcolor[2],classcolor[3])
 
 
 for i=1,40 do
       local name, _, _, _, class, _, _, _, _, role, _, _ = GetRaidRosterInfo(i);
       if class == "Warrior" or class == "Druid" then
-        tank = {"class" = class, "name" = name}
+        tank = {class = class, name = name}
         table.insert(potentialTanks, tank)
       end
    end
@@ -57,6 +61,7 @@ BPA.heal:SetText("Blood Pact Raid Assignments")
 -- addon Load
 local function BPALoad(self, event, arg1, arg2, arg3, arg4, ...)
   if event == "ADDON_LOADED" and arg1 == "bpa" then
+
   end
 end
 
