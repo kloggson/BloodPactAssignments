@@ -1,0 +1,11 @@
+## Interface: 11305
+## Title: Blood Pact Assignments
+
+## Notes: assign targets
+
+## Author: Katyparry & Healakunis @ Zandalar Tribe
+## Version: 0.0.1
+
+##
+
+BloodPactAssignments.lua
