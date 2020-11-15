@@ -1,15 +1,15 @@
 -- addon frame
 local frame = BPAframe or CreateFrame("FRAME", "BPAframe")
 local ClassRGB = {["Priest"] = {1.00, 1.00, 1.00}, ["Paladin"] = {0.96, 0.55, 0.73}, ["Druid"] = {1.00, 0.49, 0.04}, ["Shaman"] = {0.96, 0.55, 0.73}, ["Warrior"] = {0.78, 0.61, 0.43}}
-
+local potentialTanks = {}
 
 local function initRaid()
   print("init raid!")
-  local potentialTanks = {}
+  potentialTanks = {}
   for i=1,40 do
     local name, _, _, _, class, _, _, _, _, role, _, _ = GetRaidRosterInfo(i);
-    if class == "Guerrier" or class == "Druide" then
-      tank = {class = class, name = name, color = ClassRGB[class]}
+    if class == "Warrior" or class == "Druid" then
+      tank = {class = class, name = name, color = ClassRGB[class], isTank = false}
       table.insert(potentialTanks, tank)
     end
   end
@@ -64,6 +64,38 @@ TankFrame.initButton:SetWidth(70  )
 TankFrame.initButton:SetHeight(22)
 TankFrame.initButton:SetScript("OnClick", initRaid)
 
+-- Tank Dropdown
+
+local tankDropDown = CreateFrame("FRAME", "tankSelect", TankFrame, "UIDropDownMenuTemplate")
+tankDropDown:SetPoint("TOPLEFT", 12, - 36)
+UIDropDownMenu_SetWidth(tankDropDown, 125)
+UIDropDownMenu_SetText(tankDropDown, "Select tanks")
+UIDropDownMenu_JustifyText(tankDropDown, "LEFT")
+
+UIDropDownMenu_Initialize(tankDropDown, function(self, level, menu)
+  local info = UIDropDownMenu_CreateInfo()
+  for option = 1, #potentialTanks do
+    info.text = potentialTanks[option].name
+    info.isNotRadio = true
+    info.keepShownOnClick = true
+    info.checked = potentialTanks[option].isTank
+    tankFont = {}
+    tankFont[option] =  CreateFont("font" .. option)
+    tankFont[option]:SetTextColor(potentialTanks[option].color[1], potentialTanks[option].color[2], potentialTanks[option].color[3])
+    info.fontObject = tankFont[option]
+    info.func = function(self, arg1, arg2, checked)
+      if checked then
+        potentialTanks[option].isTank = true
+      else
+        potentialTanks[option].isTank = false
+      end
+    end
+    UIDropDownMenu_AddButton(info)
+  end
+end)
+
+
+
 -- addon Load
 local function BPALoad(self, event, arg1, arg2, arg3, arg4, ...)
   if event == "ADDON_LOADED" and arg1 == "bpa" then
@@ -74,6 +106,7 @@ end
 -- Show UI
 SLASH_BPA1 = "/bpa"
 SlashCmdList["BPA"] = function(functionName)
+  initRaid()
   BPA:Show()
 end
 
